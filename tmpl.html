@@ -1,0 +1,31 @@
+<html>
+<body id='disp'></body>
+<script>
+(new Promise((res, rej) => {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'getToken');
+  xhr.onload = function () {
+    if (this.status == 200) res(JSON.parse(xhr.response).token);
+    else rej({err: xhr.statusText});
+  };
+  xhr.send();
+})).then(token => {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'http://' + token + '.{{test_host}}');
+  xhr.send();
+  console.log('Token:', token)
+  window.setInterval(() => {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'getAddress/' + token);
+    xhr.send();
+    xhr.onload = function () {
+      if (this.status == 200) {
+        console.log('Addrs:', xhr.response)
+        var arr = JSON.parse(xhr.response);
+        document.getElementById('disp').innerHTML = arr.filter((i, p, o) => o.indexOf(i) == p).join('<br>');
+      }
+    };
+  }, 3000);
+}).catch(console.log)
+</script>
+</html>

@@ -1,0 +1,6 @@
+{
+  "dnsport": 53,
+  "httpport": 8080,
+  "tmpl": "tmpl.html",
+  "testhost": "test.dnspy.nat.moe"
+}
